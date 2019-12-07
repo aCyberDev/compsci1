@@ -6,10 +6,6 @@ using namespace std;
 
 class Registration {
 public:
-	void subjectScience();
-	void subjectMath();
-	void subjectArt();
-	void subjectHumanities();
 	void field();
 	int studySelection(int);
 	void setSelection(int);
