@@ -133,21 +133,6 @@ int main() {
 	
 	cout << "You have signed up to the following: " << endl;
 	studentClasses.storedSubjects();
-
-	//create a function that verifies that the input is correct/within the menu options.
-	//if subject is Science
-		//then display field of study (example: 1.Earth Science, 2.Oceanography, 3.Biology etc.)
-		//create a vector that holds amount of units for each subject
-	//save options for future summary.
-
-
-	//selection -= 1;
-	//array(selection);
-
-	//unitAmount += vectorValue(selection);
-	//provide summary 
-
-	 // unitAmount"/12" << endl;
-
+	
 	return 0;
 }
