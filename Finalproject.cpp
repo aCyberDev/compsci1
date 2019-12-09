@@ -6,23 +6,95 @@ using namespace std;
 
 class Registration {
 public:
-	void field();
-	int studySelection(int);
-	void setSelection(int);
-	void storedSubjects();
+	//public functions overloaded with main() function variables
+	void minimizeCode(vector<string>,string,int&,int);
+	vector<string> studySubjects(int);
+	void warning(char &, int &, bool &);
+	void prompt(int);
+	void displaySummary(int);
+	void modify(char,int);
 
-	vector<string> studyField = { "Science", "Mathematics", "Arts", "Humanities" };
-	vector<string> science = { "Earth Science", "Biology", "Oceanography", "Geology", "Astronomy" };
-	vector<string> mathematics = { "Pre-Algebra", "Algebra", "Geometry", "Calculus I", "Calculus II" };
-	vector<string> arts = { "Music", "Painting", "Literature", "Sculpting", "Film" };
-	vector<string> humanities = { "American Sign Lang", "Creative Writing: Fiction", "Elementary French","Hispanic Literature","California History" };
-	vector<string> storeSubject;
-	int count = 1;
-
+	//public variables initilized to vector string values
+	vector < string > studyField = { "Science", "Mathematics", "Arts", "Humanities" };
+	vector < string > science = { "Earth Science", "Biology", "Oceanography", "Geology", "Astronomy" };
+	vector < string > mathematics = { "Pre-Algebra", "Algebra", "Geometry", "Calculus I", "Calculus II" };
+	vector < string > arts = { "Music", "Painting", "Literature", "Sculpting", "Film" };
+	vector < string > humanities = { "Japenese", "Creative Writing", "Elementary French", "Hispanic Literature", "California History" };
+	vector <string> storeSubjects;
+	
 private:
 
 };
-void Registration::field() {
+
+int main()
+{
+	//variables outside of class ceated for making decisions
+	vector <string> subject;
+	string compare = "\0";
+	int count = 1;
+	int selection = 0;
+	bool quit = false;
+	char choice = '\0';
+
+	//object for Registration
+	Registration springClass;
+	//reuse class registration to create summerClass, and fallClass objects
+
+	do
+	{
+		springClass.prompt(count);
+		cout << "You can make your selection now: ";
+		cin >> selection;
+		selection -= 1;
+
+		compare = springClass.studyField.at(selection);
+		subject = springClass.studySubjects(selection);
+		springClass.minimizeCode(subject,compare,count,selection);
+		springClass.warning(choice,count,quit);
+		springClass.modify(choice,selection);
+
+	} while (quit == false);
+	springClass.displaySummary(count);
+	//implement editing logic to ADD, Delete, Replace current selections
+
+	return 0;
+}
+
+void Registration::minimizeCode(vector<string> subject, string compare, int &count, int selection) {
+	if (studyField.at(selection) == compare)
+	{
+		for (unsigned int i = 0; i < subject.size(); i++)
+		{
+			cout << count << ": " << subject.at(i) << endl;
+			count++;
+		}
+		count = 1;
+		cout << "Please make your class selection now: ";
+		cin >> selection;
+		selection -= 1;
+		storeSubjects.push_back(subject.at(selection));
+	}
+}
+vector<string> Registration::studySubjects(int selection) {
+	if (studyField.at(selection) == "Science") {
+		return science;
+	}
+	else if (studyField.at(selection) == "Mathematics")
+	{
+		return mathematics;
+	}
+	else if (studyField.at(selection) == "Arts")
+	{
+		return arts;
+	}
+	else
+	{
+		return humanities;
+	}
+	
+}
+void Registration::prompt(int count) {
+	cout << "Please select a field of study" << endl;
 	for (unsigned int i = 0; i < studyField.size(); i++)
 	{
 		cout << count << ": " << studyField.at(i) << endl;
@@ -30,105 +102,53 @@ void Registration::field() {
 	}
 	count = 1;
 }
-int Registration::studySelection(int study_Selection) {
-	cout << "You have chosen: " << studyField.at(study_Selection) << endl;
-	return study_Selection;
+void Registration::warning(char &choice, int &count, bool &quit) {
+	if (storeSubjects.size() >= 4)
+	{
+		cout << "\nWe recommend that you only take 4 classes per semester, you have selected these classes: " << endl;
+		cout << "------------------------" << endl;
+			
+		for (unsigned int i = 0; i < storeSubjects.size(); i++)
+		{
+			cout << count << ": " << storeSubjects.at(i) << endl;
+			cout << "------------------------" << endl;
+			count++;
+		}
+		count = 1;
+		cout << "\nwould you like to add more? (Y / N): ";
+		cin >> choice;
+		if(choice == 'N')
+		{
+			quit = true;
+			if (quit == true)
+			{
+				cout << "If you would like to DELETE or REPLACE one of the above classes type: (D) to delete / (R) to replace\nOtherwise type: (N) ";
+				cin >> choice;
+			}
+		}
+	}
 }
-void Registration::setSelection(int study_selection) {
-	
-	if (studyField.at(study_selection) == "Science")
-	{
-		for (unsigned int i = 0; i < science.size(); i++)
-		{
-			cout << count << ": " << science.at(i) << endl;
-			count++;
-		}
-		count = 1;
-		cout << "Please select one of the study subjects: ";
-		cin >> study_selection;
-		study_selection -= 1;
-		storeSubject.push_back(science.at(study_selection));
+void Registration::modify(char choice, int selection) {
+	if (choice == 'D') {
+		cout << "Which selection would you like to delete? from 1 to " << storeSubjects.size() << ": ";
+		cin >> selection;
+		selection -= 1;
+		storeSubjects.erase(storeSubjects.begin() + selection);
 	}
-	else if (studyField.at(study_selection) == "Mathematics")
+}
+void Registration::displaySummary(int count) {
+	cout << "\nYou have selected the following classes: " << endl;
+	cout << "_________________________________________________________________________________________" << endl;
+	for (unsigned int i = 0; i < storeSubjects.size(); ++i)
 	{
-		for (unsigned int i = 0; i < mathematics.size(); i++)
-		{
-			cout << count << ": " << mathematics.at(i) << endl;
-			count++;
+		cout << count << ": " << storeSubjects.at(i) << "   |   ";
+		if (i == 3) {
+			cout << endl;
+			cout << "_________________________________________________________________________________________" << endl;
 		}
-		count = 1;
-		cout << "Please select one of the study subjects: ";
-		cin >> study_selection;
-		study_selection -= 1;
-		storeSubject.push_back(mathematics.at(study_selection));
-	}
-	else if (studyField.at(study_selection) == "Arts")
-	{
-		for (unsigned int i = 0; i < arts.size(); i++)
-		{
-			cout << count << ": " << arts.at(i) << endl;
-			count++;
-		}
-		count = 1;
-		cout << "Please select one of the study subjects: ";
-		cin >> study_selection;
-		study_selection -= 1;
-		storeSubject.push_back(arts.at(study_selection));
-	}
-	else if (studyField.at(study_selection) == "Humanities")
-	{
-		for (unsigned int i = 0; i < humanities.size(); i++)
-		{
-			cout << count << ": " << humanities.at(i) << endl;
-			count++;
-		}
-		count = 1;
-		cout << "Please select one of the study subjects: ";
-		cin >> study_selection;
-		study_selection -= 1;
-		storeSubject.push_back(humanities.at(study_selection));
-	}
 
-}
-void Registration::storedSubjects() {
-	for (unsigned int i = 0; i < storeSubject.size(); i++)
-	{
-		cout << count << ": " << storeSubject.at(i) << endl;
 		count++;
 	}
 	count = 1;
-}
-
-int main() {
-	int selection = 0;
-	char Quit = 'N';
-
-	Registration studentClasses;
-
-	cout << "Spring registration is open please choose a field of study from the following: (between 1 and 4)\n" << endl;
-	do
-	{
-		if (Quit == 'Y')
-		{
-			cout << "Please choose a field of study again." << endl;
-		}
-		studentClasses.field();
-		cout << endl;
-		cout << "Please make your selection now: ";
-		cin >> selection;
-		selection -= 1;
-		cout << endl;
-
-		studentClasses.studySelection(selection);
-		studentClasses.setSelection(selection);
-		cout << endl;
-
-		cout << "Would you like to add more classes? (Y / N) ";
-		cin >> Quit;
-	} while (Quit == 'Y');
-	
-	cout << "You have signed up to the following: " << endl;
-	studentClasses.storedSubjects();
-	
-	return 0;
+	cout << endl;
 }
