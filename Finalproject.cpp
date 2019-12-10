@@ -14,6 +14,8 @@ public:
 	void prompt(int);
 	void displaySummary(int);
 	void modify(char, int, Registration&);
+	//verify that user input follows the program
+	int verifySelection(unsigned int&);
 
 	//public variables initilized to vector string values
 	vector < string > studyField = { "Science", "Mathematics", "Arts", "Humanities" };
@@ -38,7 +40,7 @@ int main()
 	vector<int> unit;
 	string compare = "\0";
 	int count = 1;
-	int selection = 0;
+	unsigned int selection = 0;
 	bool quit = false;
 	char choice = '\0';
 	char dummyVar = '\0';
@@ -54,24 +56,15 @@ int main()
 		springClass.prompt(count);
 		cout << "You can make your selection now: ";
 		cin >> selection;
-		cin.ignore(100, '\n');
-		selection -= 1;
+		springClass.verifySelection(selection);
 
-		if (selection >= 0 && selection <= 3) 
-		{
-			compare = springClass.studyField.at(selection);
-			subject = springClass.studySubjects(selection);
-			unit = springClass.unitSubjects(selection);
-			springClass.minimizeCode(subject, unit, compare, count, selection);
-			springClass.warning(choice, count, quit, unit);
-			springClass.modify(choice, selection, springClass);
-		}
-		else 
-		{
-			cout << "Out of range! Please select between 1 and 4. \n";
-			cout << "Press Enter to continue. ";
-			cin.get(dummyVar);
-		}
+		compare = springClass.studyField.at(selection);
+		subject = springClass.studySubjects(selection);
+		unit = springClass.unitSubjects(selection);
+		springClass.minimizeCode(subject, unit, compare, count, selection);
+		springClass.warning(choice, count, quit, unit);
+		springClass.modify(choice, selection, springClass);
+
 	} while (quit == false);
 	springClass.displaySummary(count);
 	//implement editing logic to ADD, Delete, Replace current selections
@@ -231,4 +224,13 @@ void Registration::displaySummary(int count) {
 	cout << left << setw(28) << "\nTotal Units: " << counter;
 	cout << endl;
 	cout << "_________________________________________________________________________________________" << endl;
+}
+int Registration::verifySelection(unsigned int &selection) {
+	while ((selection <= 0) || (selection > studyField.size()))
+	{
+		cout << "Your selection is invalid, please enter a # from 1 to " << studyField.size() << " ";
+		cin >> selection;
+	}
+	selection -= 1;
+	return selection;
 }
