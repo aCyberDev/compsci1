@@ -13,7 +13,7 @@ public:
 	void warning(char&, int&, bool&, vector<int> unit);
 	void prompt(int);
 	void displaySummary(int);
-	void modify(char, int, Registration&);
+	void modify(char, int, bool&);
 	//verify that user input follows the program
 	int verifySelection(unsigned int&);
 
@@ -63,7 +63,7 @@ int main()
 		unit = springClass.unitSubjects(selection);
 		springClass.minimizeCode(subject, unit, compare, count, selection);
 		springClass.warning(choice, count, quit, unit);
-		springClass.modify(choice, selection, springClass);
+		springClass.modify(choice, selection, quit);
 
 	} while (quit == false);
 	springClass.displaySummary(count);
@@ -174,12 +174,7 @@ void Registration::warning(char& choice, int& count, bool& quit, vector<int> uni
 		}
 	}
 }
-void Registration::modify(char choice, int selection, Registration& springClass) {
-	vector <string> subject;
-	vector<int> unit;
-	string compare = "\0";
-	int count = 1;
-
+void Registration::modify(char choice, int selection, bool &quit) {
 	if (choice == 'D' || choice == 'd') {
 		cout << "Which selection would you like to delete? from 1 to " << storeSubjects.size() << ": ";
 		cin >> selection;
@@ -192,18 +187,7 @@ void Registration::modify(char choice, int selection, Registration& springClass)
 		selection -= 1;
 		storeSubjects.erase(storeSubjects.begin() + selection);
 		storeUnits.erase(storeUnits.begin() + selection);
-
-		system("CLS"); //clear
-
-		prompt(1);
-		cout << "You can make your selection now: ";
-		cin >> selection;
-		selection -= 1;
-
-		compare = springClass.studyField.at(selection);
-		subject = springClass.studySubjects(selection);
-		unit = springClass.unitSubjects(selection);
-		springClass.minimizeCode(subject, unit, compare, count, selection);
+		quit = false;
 	}
 }
 void Registration::displaySummary(int count) {
