@@ -8,8 +8,6 @@ class Registration {
 public:
 	//public functions overloaded with main() function variables
 	void minimizeCode(vector<string>, vector<int>, string, int&, int);
-	vector<string> studySubjects(int);
-	vector<int> unitSubjects(int); 
 	void warning(char&, int&, bool&, vector<int> unit);
 	void prompt(int);
 	void displaySummary(int);
@@ -19,22 +17,84 @@ public:
 
 	//public variables initilized to vector string values
 	vector < string > studyField = { "Science", "Mathematics", "Arts", "Humanities" };
-	vector < string > science = { "Earth Science", "Biology", "Oceanography", "Geology", "Astronomy" };
-	vector < string > mathematics = { "Pre-Algebra", "Algebra", "Geometry", "Calculus I", "Calculus II" };
-	vector < string > arts = { "Music", "Painting", "Literature", "Sculpting", "Film" };
-	vector < string > humanities = { "Japenese", "Creative Writing", "Elementary French", "Hispanic Literature", "California History" };
 	vector <string> storeSubjects;
-	vector <int> unitScience = { 3, 4, 3, 3, 2 };
-	vector <int> unitMath = { 2, 4, 4, 4, 4 };
-	vector <int> unitArts = { 3, 3, 4, 3, 4 };
-	vector <int> unitHumanities = { 3, 4, 3, 4, 3 };
 	vector <int> storeUnits;
 private:
 
 };
 
-int main()
-{
+class springClass : public Registration {
+public:
+	vector < string > science = { "Earth Science", "Biology", "Oceanography", "Geology", "Astronomy" };
+	vector < string > mathematics = { "Pre-Algebra", "Algebra", "Geometry", "Calculus I", "Calculus II" };
+	vector < string > arts = { "Music", "Painting", "Literature", "Sculpting", "Film" };
+	vector < string > humanities = { "Japenese", "Creative Writing", "Elementary French", "Hispanic Literature", "California History" };
+	vector <int> unitScience = { 3, 4, 3, 3, 2 };
+	vector <int> unitMath = { 2, 4, 4, 4, 4 };
+	vector <int> unitArts = { 3, 3, 4, 3, 4 };
+	vector <int> unitHumanities = { 3, 4, 3, 4, 3 };
+};
+class summerClass : public Registration {
+public:
+	vector < string > science = { "Physics", "Chemistry", "Forensic Science", "Environmental Science", "MicroBiology" };
+	vector < string > mathematics = { "Linear Algebra", "Statistics", "Differential Equations", "Problem Solving", "Trigonometry" };
+	vector < string > arts = { "Ceramics", "Singing", "Dancing", "Woodshop", "Acting" };
+	vector < string > humanities = { "Korean History", "English I", "English II", "World History", "New Jersey History" };
+	vector <int> unitScience = { 5, 4, 4, 2, 5 };
+	vector <int> unitMath = { 5, 2, 3, 3, 4 };
+	vector <int> unitArts = { 2, 3, 3, 3, 4 };
+	vector <int> unitHumanities = { 3, 4, 4, 3, 2 };
+};
+class fallClass : public Registration {
+public:
+	vector < string > science = { "Ecology", "Organic Chemistry", "Basic Science", "Marine Biology", "Nursing" };
+	vector < string > mathematics = { "Elementary Algebra", "Intermediate Algebra", "Modules", "Analytic Geometry", "Finite Mathematics" };
+	vector < string > arts = { "Photography", "Printmaking", "Animation", "Art Appreciation", "Architecture" };
+	vector < string > humanities = { "Anthropology", "Archaeology", "Philosophy", "Law", "Politics" };
+	vector <int> unitScience = { 3, 5, 2, 4, 5 };
+	vector <int> unitMath = { 2, 3, 4, 4, 4 };
+	vector <int> unitArts = { 2, 2, 3, 2, 4 };
+	vector <int> unitHumanities = { 3, 3, 3, 5, 3 };
+};
+template <typename Type> //lets you use any data type
+vector<string> studySubjects(int selection, Type& semester) {
+	if (semester->studyField.at(selection) == "Science") {
+		return semester->science;
+	}
+	else if (semester->studyField.at(selection) == "Mathematics")
+	{
+		return semester->mathematics;
+	}
+	else if (semester->studyField.at(selection) == "Arts")
+	{
+		return semester->arts;
+	}
+	else
+	{
+		return semester->humanities;
+	}
+}
+template <typename Type> //lets you use any data type
+vector<int> unitSubjects(int selection, Type& semester) {
+	if (selection == 0)
+	{
+		return semester->unitScience;
+	}
+	else if (selection == 1)
+	{
+		return semester->unitMath;
+	}
+	else if (selection == 2)
+	{
+		return semester->unitArts;
+	}
+	else
+	{
+		return semester->unitHumanities;
+	}
+}
+template <typename Type> //lets you use any data type
+void start(Type& semester) {
 	//variables outside of class created for making decisions
 	vector <string> subject;
 	vector<int> unit;
@@ -45,29 +105,52 @@ int main()
 	char choice = '\0';
 	char dummyVar = '\0';
 
-	//object for Registration
-	Registration springClass;
-	//reuse class registration to create summerClass, and fallClass objects
-
 	do
 	{
 		system("CLS"); //clear
 
-		springClass.prompt(count);
+		semester->prompt(count);
 		cout << "You can make your selection now: ";
 		cin >> selection;
-		springClass.verifySelection(selection);
+		semester->verifySelection(selection);
 
-		compare = springClass.studyField.at(selection);
-		subject = springClass.studySubjects(selection);
-		unit = springClass.unitSubjects(selection);
-		springClass.minimizeCode(subject, unit, compare, count, selection);
-		springClass.warning(choice, count, quit, unit);
-		springClass.modify(choice, selection, quit);
+		compare = semester->studyField.at(selection);
+		subject = studySubjects(selection, semester);
+		unit = unitSubjects(selection, semester);
+		semester->minimizeCode(subject, unit, compare, count, selection);
+		semester->warning(choice, count, quit, unit);
+		semester->modify(choice, selection, quit);
 
 	} while (quit == false);
-	springClass.displaySummary(count);
-	//implement editing logic to ADD, Delete, Replace current selections
+	semester->displaySummary(count);
+}
+int main()
+{
+	char userSem = '\0';
+
+	do {
+		system("CLS");
+
+		cout << "Semester you are attending: " << endl;
+		cout << "1: Summer" << endl;
+		cout << "2: Spring" << endl;
+		cout << "3: Fall" << endl << endl;
+		cout << "Choice: ";
+		cin >> userSem;
+	} while (userSem != '1' && userSem != '2' && userSem != '3');
+
+	if (userSem == '1') {
+		summerClass* semester = new summerClass;
+		start(semester);
+	}
+	else if (userSem == '2') {
+		springClass* semester = new springClass;
+		start(semester);
+	}
+	else {
+		fallClass* semester = new fallClass;
+		start(semester);
+	}
 
 	return 0;
 }
@@ -99,42 +182,6 @@ void Registration::minimizeCode(vector<string> subject, vector<int> unit, string
 			cout << "Press Enter to continue. ";
 			cin.get(dummyVar);
 		}
-	}
-}
-vector<string> Registration::studySubjects(int selection) {
-	if (studyField.at(selection) == "Science") {
-		return science;
-	}
-	else if (studyField.at(selection) == "Mathematics")
-	{
-		return mathematics;
-	}
-	else if (studyField.at(selection) == "Arts")
-	{
-		return arts;
-	}
-	else
-	{
-		return humanities;
-	}
-
-}
-vector<int> Registration::unitSubjects(int selection) {
-	if (selection == 0) 
-	{
-		return unitScience;
-	}
-	else if (selection == 1)
-	{
-		return unitMath;
-	}
-	else if (selection == 2) 
-	{
-		return unitArts;
-	}
-	else 
-	{
-		return unitHumanities;
 	}
 }
 void Registration::prompt(int count) {
@@ -174,12 +221,13 @@ void Registration::warning(char& choice, int& count, bool& quit, vector<int> uni
 		}
 	}
 }
-void Registration::modify(char choice, int selection, bool &quit) {
+void Registration::modify(char choice, int selection, bool& quit) {
 	if (choice == 'D' || choice == 'd') {
 		cout << "Which selection would you like to delete? from 1 to " << storeSubjects.size() << ": ";
 		cin >> selection;
 		selection -= 1;
 		storeSubjects.erase(storeSubjects.begin() + selection);
+		storeUnits.erase(storeUnits.begin() + selection);
 	}
 	else if (choice == 'R' || choice == 'r') {
 		cout << "Which selection would you like to replace? from 1 to " << storeSubjects.size() << ": ";
@@ -209,7 +257,7 @@ void Registration::displaySummary(int count) {
 	cout << endl;
 	cout << "_________________________________________________________________________________________" << endl;
 }
-int Registration::verifySelection(unsigned int &selection) {
+int Registration::verifySelection(unsigned int& selection) {
 	while ((selection <= 0) || (selection > studyField.size()))
 	{
 		cout << "Your selection is invalid, please enter a # from 1 to " << studyField.size() << " ";
